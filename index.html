@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Visual de la Biblia — Variante C (v2 · A/B — Bônus Reorganizados)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2F5D8A; --blue-deep:#233F5C; --blue-soft:#EAF2FA;
+    --gold:#D9A441; --gold-deep:#B98A2E;
+    --cream:#FDFBF6; --cream-2:#F4EFE4;
+    --ink:#22303F; --ink-soft:#5B6B7A;
+    --line:#E3E7EC; --green:#3E8E5A;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Manrope', -apple-system, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family: var(--sans); color: var(--ink); background: var(--cream); line-height:1.6; overflow-x:hidden; }
+  img,svg{ display:block; max-width:100%; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 22px; }
+  h1,h2,h3{ font-family: var(--serif); font-weight:700; color: var(--ink); }
+  .center{ text-align:center; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background: var(--blue); color:#fff; font-weight:700; font-size:15.5px;
+    padding:16px 30px; border-radius:12px; border:none; cursor:pointer; text-decoration:none;
+    box-shadow: 0 14px 26px -14px rgba(47,93,138,0.55);
+    transition: transform .15s ease; min-height:44px;
+  }
+  .btn:hover{ transform: translateY(-2px); }
+  .btn:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+  .btn-ghost{ background:#fff; color: var(--blue); border:1.5px solid var(--line); box-shadow:none; }
+
+  .topbar{ background: var(--blue); color:#fff; text-align:center; font-size:13px; font-weight:700; padding:10px 16px; text-transform:uppercase; letter-spacing:0.3px; }
+
+  .brand-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:18px; }
+  .brand-mark{ width:26px; height:26px; border-radius:7px; }
+  .brand-name{ font-family: var(--serif); font-weight:700; font-size:16px; color: var(--ink); }
+
+  .hero{ padding: 34px 0 10px; text-align:center; }
+  .hero h1{ font-size: clamp(28px,5vw,46px); line-height:1.12; max-width:760px; margin:0 auto 18px; font-weight:900; }
+  .hero p.lede{ font-size:17px; color: var(--ink-soft); max-width:540px; margin:0 auto 30px; }
+
+  .hero-single-image{ max-width:320px; margin: 6px auto 26px; }
+  .hero-single-image img{
+    width:100%; border-radius:18px; border:1px solid var(--line);
+    box-shadow: 0 24px 48px -20px rgba(34,48,63,0.35);
+  }
+
+  .cta-row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:24px; }
+
+  .stars{ color: var(--gold); font-size:14px; letter-spacing:2px; margin-bottom:4px; }
+  .proof-line{ font-size:13.5px; color: var(--ink-soft); font-weight:600; }
+
+  .marquee-outer{ position:relative; overflow:hidden; padding:34px 0; }
+  .marquee-outer::before, .marquee-outer::after{ content:""; position:absolute; top:0; bottom:0; width:80px; z-index:2; }
+  .marquee-outer::before{ left:0; background:linear-gradient(to right, var(--cream), transparent); }
+  .marquee-outer::after{ right:0; background:linear-gradient(to left, var(--cream), transparent); }
+  .marquee-track{ display:flex; gap:16px; width:max-content; animation: scrollX 32s linear infinite; }
+  .marquee-outer:hover .marquee-track{ animation-play-state: paused; }
+  @keyframes scrollX{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+  .shot-card{
+    flex:0 0 190px; aspect-ratio:3/4; background:#fff; border:1px solid var(--line); border-radius:14px;
+    display:flex; align-items:center; justify-content:center; text-align:center; font-size:12px; color:var(--ink-soft); padding:10px;
+    overflow:hidden;
+  }
+  .shot-card img{ width:100%; height:100%; object-fit:cover; }
+
+  .section{ padding:56px 0; }
+  .section-soft{ background: var(--cream-2); }
+  .section-head{ max-width:620px; margin:0 auto 34px; text-align:center; }
+  .section-head .eyebrow{ font-size:12px; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; color: var(--gold-deep); }
+  .section-head h2{ font-size: clamp(24px,3.6vw,34px); margin-top:10px; }
+  .section-head p{ color: var(--ink-soft); margin-top:10px; font-size:15.5px; }
+
+  .video-block{
+    max-width:300px; margin:0 auto 60px; aspect-ratio:3/4; background: var(--blue-deep); border-radius:24px;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; color:#fff; text-align:center; padding:22px;
+  }
+  .play-btn{ width:56px; height:56px; border-radius:50%; background: var(--gold); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+  .video-block .note{ font-size:12px; color: rgba(255,255,255,0.7); }
+
+  .primary-wrap{ margin-top:50px; }
+  .primary-float-img{
+    display:block; width:min(88%,460px); margin:0 auto -55px; position:relative; z-index:2;
+    border-radius:20px; box-shadow:0 24px 50px -18px rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.4);
+  }
+  .primary-card{ background: var(--blue); border-radius:40px; padding:95px 30px 40px; position:relative; color:#fff; }
+  .primary-card p{ font-size:15.5px; line-height:1.7; opacity:0.94; margin-bottom:16px; }
+  .primary-card p:last-child{ margin-bottom:0; }
+
+  .module{
+    background:#fff; border-radius:26px; padding: 36px 30px; margin-bottom:22px;
+    display:grid; grid-template-columns: 1fr 1.2fr; gap:36px; align-items:center;
+  }
+  .module:last-child{ margin-bottom:0; }
+  .module-visual{
+    aspect-ratio:4/3; background: var(--blue-soft); border-radius:18px;
+    display:flex; align-items:center; justify-content:center; color:var(--blue); font-weight:700; font-size:13px; text-align:center; padding:10px;
+    overflow:hidden;
+  }
+  .module-visual img{ width:100%; height:100%; object-fit:cover; border-radius:12px; }
+  .module-text h3{ font-size:21px; margin-bottom:10px; }
+  .module-text p{ color: var(--ink-soft); font-size:15px; margin-bottom:12px; }
+  .module-text ul{ list-style:none; }
+  .module-text li{ display:flex; gap:8px; font-size:14px; padding:5px 0; color:var(--ink); }
+  .module-text li::before{ content:"✓"; color: var(--blue); font-weight:900; flex-shrink:0; }
+
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .testi-card{ background:#fff; border-radius:18px; padding:24px; box-shadow:0 10px 26px -18px rgba(34,48,63,0.25); }
+  .testi-card p{ font-size:14px; color: var(--ink-soft); font-style:italic; margin-bottom:16px; }
+  .testi-who{ display:flex; align-items:center; gap:10px; }
+  .testi-avatar{ width:36px; height:36px; border-radius:50%; background: var(--blue-soft); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:700; font-size:13px; color:var(--blue); flex-shrink:0; }
+
+  .testi-card-v2{ background:#fff; border-radius:16px; padding:22px 24px; box-shadow:0 10px 26px -18px rgba(34,48,63,0.2); }
+  .testi-stars{ color: var(--gold); font-size:15px; letter-spacing:3px; margin-bottom:12px; }
+  .testi-v2-name{ font-weight:700; color: var(--blue); font-size:15px; margin-bottom:8px; }
+  .testi-v2-quote{ font-size:13.5px; color: var(--ink-soft); line-height:1.65; }
+  .testi-v2-quote strong{ color: var(--ink); font-weight:700; }
+  .testi-name{ font-size:13.5px; font-weight:700; }
+
+  .discount-banner{ background: var(--blue); color:#fff; text-align:center; border-radius:12px; padding:10px 16px; margin-bottom:16px; font-weight:700; }
+  .discount-banner small{ display:block; font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px; opacity:0.85; margin-bottom:2px; }
+
+  .pricing-cards{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:70px; }
+  .price-card{ background:#fff; border-radius:30px; padding:34px 26px 30px; position:relative; border:1.5px solid var(--line); display:flex; flex-direction:column; }
+  .price-card.featured{ border-color: var(--gold); box-shadow:0 26px 50px -22px rgba(217,164,65,0.4); }
+  .ribbon{ position:absolute; top:-14px; right:20px; background:var(--gold); color:#fff; font-size:10.5px; font-weight:800; text-transform:uppercase; padding:6px 14px; border-radius:999px; white-space:nowrap; }
+  .price-card h3{ font-size:22px; text-align:center; margin:0 0 4px; }
+  .price-strike{ display:block; text-align:center; color:#A3AEB8; text-decoration:line-through; font-size:14px; }
+  .price-big{ display:block; text-align:center; font-family:var(--serif); font-weight:900; font-size:42px; color:var(--ink); }
+  .price-caption{ text-align:center; font-size:13px; color:var(--ink-soft); margin-bottom:18px; }
+  .plan-list{ list-style:none; margin-bottom:20px; flex-grow:1; }
+  .plan-list li{ display:flex; gap:9px; align-items:flex-start; font-size:14px; padding:6px 0; }
+  .plan-list li::before{ content:"✓"; color:var(--green); font-weight:900; flex-shrink:0; }
+  .plan-list li.no{ color:#AFAFAF; text-decoration:line-through; }
+  .plan-list li.no::before{ content:"✕"; color:#D96B5C; text-decoration:none; }
+  .price-card .btn{ width:100%; }
+
+  /* Downsell popup — Card A (Básico) */
+  .ds-overlay{
+    display:none; position:fixed; inset:0; z-index:100;
+    background:rgba(34,48,63,0.55); backdrop-filter: blur(2px);
+    align-items:center; justify-content:center; padding:18px;
+  }
+  .ds-overlay.is-open{ display:flex; }
+  .ds-modal{
+    position:relative; background:#fff; border-radius:26px; max-width:460px; width:100%;
+    padding:38px 34px 30px; box-shadow:0 40px 80px -30px rgba(20,30,42,0.5);
+    max-height:92vh; overflow-y:auto; text-align:center;
+  }
+  .ds-close{
+    position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%;
+    background:var(--cream-2); border:none; color:var(--ink-soft); font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .ds-close:hover{ background:var(--line); }
+  .ds-tag{
+    display:inline-block; background:var(--gold); color:#fff; font-weight:800; font-size:12px;
+    letter-spacing:0.6px; text-transform:uppercase; padding:6px 14px; border-radius:100px; margin-bottom:16px;
+  }
+  .ds-modal img{ width:100%; max-width:190px; margin:4px auto 16px; border-radius:14px; }
+  .ds-modal h2{ font-size:25px; line-height:1.25; margin-bottom:10px; }
+  .ds-modal p.ds-sub{ font-size:14.5px; color:var(--ink-soft); margin-bottom:18px; line-height:1.6; }
+  .ds-list{ list-style:none; text-align:left; margin:0 0 20px; padding:16px 18px; background:var(--cream-2); border-radius:14px; }
+  .ds-list li{ font-size:14px; color:var(--ink); padding:5px 0 5px 24px; position:relative; }
+  .ds-list li::before{ content:"✓"; position:absolute; left:0; color:var(--green); font-weight:800; }
+  .ds-price-row{ margin-bottom:18px; }
+  .ds-price-row .price-strike{ font-size:14px; }
+  .ds-price-row .price-big{ font-size:40px; }
+  .ds-save{ display:inline-block; background:var(--blue-soft); color:var(--blue); font-weight:700; font-size:12.5px; padding:5px 12px; border-radius:100px; margin-top:4px; }
+  .ds-modal .btn{ width:100%; margin-bottom:12px; }
+  .ds-decline{
+    display:block; text-align:center; font-size:13.5px; color:var(--ink-soft);
+    text-decoration:underline; background:none; border:none; cursor:pointer; width:100%; padding:6px;
+  }
+  .ds-decline:hover{ color:var(--ink); }
+  .ds-trust{ font-size:12px; color:var(--ink-soft); margin-top:14px; }
+  .trust-line{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:12px; }
+
+  .guarantee-box{ max-width:600px; margin:0 auto; background:#fff; border-radius:24px; padding:40px; text-align:center; box-shadow:0 14px 30px -18px rgba(34,48,63,0.2); }
+  .guarantee-box .icon{ width:110px; margin:0 auto 14px; }
+
+  .author-card{
+    max-width:760px; margin:0 auto; background:linear-gradient(135deg,#fff,var(--blue-soft));
+    border-radius:24px; padding:38px 40px; display:flex; align-items:center; gap:34px;
+    border-left:5px solid var(--gold); box-shadow:0 14px 30px -18px rgba(34,48,63,0.18);
+  }
+  .author-photo{
+    width:130px; height:130px; border-radius:50%; flex-shrink:0; background:var(--blue-soft);
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    color:var(--ink-soft); font-size:12px; text-align:center; overflow:hidden;
+  }
+  .author-photo img{ width:100%; height:100%; object-fit:cover; }
+  .author-text .eyebrow{ font-size:12px; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; color: var(--gold-deep); display:block; margin-bottom:8px; }
+  .author-text p{ color: var(--ink-soft); font-size:14.5px; margin-bottom:10px; }
+  .author-text p:last-child{ margin-bottom:0; }
+  @media (max-width:640px){
+    .author-card{ flex-direction:column; text-align:center; padding:32px 26px; }
+  }
+
+  details{ background:#fff; border-radius:14px; padding:0 20px; margin-bottom:12px; }
+  details summary{ padding:18px 0; font-family: var(--serif); font-weight:700; font-size:16.5px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; min-height:44px; }
+  details summary::-webkit-details-marker{ display:none; }
+  details summary::after{ content:"+"; color:var(--gold-deep); font-size:22px; font-weight:400; transition:transform .2s ease; }
+  details[open] summary::after{ transform:rotate(45deg); }
+  details p{ padding-bottom:18px; font-size:14.5px; color:var(--ink-soft); }
+
+  footer{ background: var(--ink); color:rgba(253,251,246,0.6); padding:40px 22px; }
+  footer .wrap{ display:grid; grid-template-columns:2fr 1fr; gap:30px; text-align:left; }
+  footer h4{ color:#fff; font-size:14px; margin-bottom:12px; font-family:var(--sans); }
+  footer ul{ list-style:none; font-size:13px; }
+  footer li{ padding:4px 0; }
+  footer a{ color:rgba(253,251,246,0.8); text-decoration:none; }
+  footer a:hover{ text-decoration:underline; }
+  footer .mission{ font-size:13px; max-width:320px; }
+  .footer-bottom{ text-align:center; font-size:11.5px; color:rgba(253,251,246,0.4); margin-top:30px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); }
+
+  @media (max-width:820px){
+    .module{ grid-template-columns:1fr; }
+    .testi-grid, .pricing-cards{ grid-template-columns:1fr; }
+    .pricing-cards{ gap:28px 0; }
+    .ds-modal{ padding:26px 18px 22px; }
+    .ds-modal h2{ font-size:22px; }
+    .ds-modal .price-big{ font-size:36px; }
+    footer .wrap{ grid-template-columns:1fr; text-align:center; }
+    footer .mission{ margin:0 auto; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">✝️ Oferta especial válida hoy 🙏</div>
+
+<section class="hero wrap">
+  <div class="brand-row">
+    <svg class="brand-mark" viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#2F5D8A"/><circle cx="15" cy="15" r="3" fill="#D9A441"/></svg>
+    <span class="brand-name">Mapa Visual de la Biblia</span>
+  </div>
+
+  <h1>Entiende los 66 libros de la Biblia de forma simple y vive la transformación de la Palabra en tu vida</h1>
+  <p class="lede">Una manera fácil, pensada para que cualquier persona aprenda la Palabra de Dios sin sentirse perdida.</p>
+
+  <div class="hero-single-image">
+    <img src="portada-pack-completo.png" alt="Pack Completo — 66 Mapas Mentales de la Biblia">
+  </div>
+
+  <div class="cta-row">
+    <a href="#precio" class="btn">📖 Quiero Adquirir</a>
+    <a href="#presentacion" class="btn btn-ghost">▶ Quiero Conocer</a>
+  </div>
+</section>
+
+<section class="section" style="padding-bottom:0; text-align:center;">
+  <div class="wrap">
+    <div class="stars" style="justify-content:center; display:flex;">★★★★★</div>
+    <h2 style="margin-top:10px;">Lo que dicen sobre el Mapa Visual de la Biblia</h2>
+    <p style="color:var(--ink-soft); font-size:15.5px; margin-top:8px;"><strong style="color:var(--ink);">El Mapa Visual de la Biblia es increíble</strong>, y quienes ya lo están usando <strong style="color:var(--ink);">coinciden con esto</strong>.</p>
+  </div>
+</section>
+
+<section class="marquee-outer">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="shot-card"><img src="testimonio-01.jpeg" alt="Testimonio 1"></div>
+    <div class="shot-card"><img src="testimonio-02.jpeg" alt="Testimonio 2"></div>
+    <div class="shot-card"><img src="testimonio-03.jpeg" alt="Testimonio 3"></div>
+    <div class="shot-card"><img src="testimonio-04.jpeg" alt="Testimonio 4"></div>
+    <div class="shot-card"><img src="testimonio-05.jpeg" alt="Testimonio 5"></div>
+    <div class="shot-card"><img src="testimonio-06.jpeg" alt="Testimonio 6"></div>
+  </div>
+</section>
+
+<section class="section" id="presentacion">
+  <div class="wrap">
+    <div class="brand-row"><svg class="brand-mark" viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#2F5D8A"/><circle cx="15" cy="15" r="3" fill="#D9A441"/></svg><span class="brand-name">Mapa Visual de la Biblia</span></div>
+    <div class="section-head"><h2>De Génesis a Apocalipsis: entiende todos los libros de la Biblia a través de mapas visuales</h2></div>
+
+    <div class="video-block">
+      <div class="play-btn"><svg width="18" height="18" viewBox="0 0 20 20"><path d="M6 4l10 6-10 6V4z" fill="#233F5C"/></svg></div>
+      <p style="font-weight:700; margin-bottom:4px;">Video de presentación</p>
+      <p class="note">Espacio reservado para la VSL — reemplazar cuando esté grabada.</p>
+    </div>
+
+    <div class="primary-wrap">
+      <img class="primary-float-img" src="mockup-pack-completo-stack.png" alt="Pack Completo — 66 Mapas Mentales de la Biblia, vista en pilha">
+      <div class="primary-card">
+      <p><strong>El Mapa Visual de la Biblia</strong> son resúmenes visuales de la Biblia, pensados para acompañarte a explorar y comprender la Palabra de Dios en su totalidad — simplificando la riqueza de las enseñanzas de cada libro sagrado.</p>
+      <p>Con el Mapa Visual, vas a poder dedicarte al estudio diario de la Biblia con entusiasmo, equipada con una guía eficaz para navegar las Escrituras y sus múltiples dimensiones.</p>
+      <p>Esta es la mejor forma de mejorar tu conocimiento bíblico, estudiando con confianza y viviendo una transformación espiritual profunda al sumergirte en las enseñanzas de cada libro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="recibe">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Qué vas a recibir</span>
+      <h2>Simplificando tu jornada espiritual y fortaleciendo tu conexión con Dios</h2>
+    </div>
+
+    <div class="module">
+      <div class="module-visual"><img src="mockup-genesis-detalle.png" alt="Vista previa del mapa visual del libro de Génesis"></div>
+      <div class="module-text">
+        <h3>Mapa de los 66 Libros</h3>
+        <p>Explora cada uno de los 66 libros de la Biblia de forma clara y estructurada, con resúmenes y elementos esenciales que facilitan el entendimiento de la Palabra de Dios.</p>
+        <ul><li>Resumen del libro</li><li>Autor y momento histórico</li><li>Personajes principales</li><li>Versículos clave</li></ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-visual"><img src="mockup-linea-tiempo.png" alt="Vista previa de la Línea de Tiempo Bíblica"></div>
+      <div class="module-text">
+        <h3>Eventos Cronológicos</h3>
+        <p>Comprende la secuencia de los principales acontecimientos bíblicos en orden cronológico, facilitando el entendimiento de la historia de la salvación.</p>
+        <ul><li>Línea de tiempo bíblica</li><li>Conexiones entre eventos</li><li>Contexto histórico</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="brand-row"><svg class="brand-mark" viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#2F5D8A"/><circle cx="15" cy="15" r="3" fill="#D9A441"/></svg><span class="brand-name">Mapa Visual de la Biblia</span></div>
+    <div class="section-head"><h2>Lo que dicen quienes ya lo usan</h2></div>
+    <div class="testi-grid">
+      <div class="testi-card"><p>"Antes, me sentía perdido al intentar entender ciertos libros de la Biblia. El Mapa me dio una visión panorámica que marcó toda la diferencia."</p><div class="testi-who"><div class="testi-avatar">CM</div><span class="testi-name">Carlos Mendoza</span></div></div>
+      <div class="testi-card"><p>"Entender el contexto de cada libro me ayudó a aplicar las enseñanzas de la Biblia en mi vida. Estoy muy agradecida por este material."</p><div class="testi-who"><div class="testi-avatar">ML</div><span class="testi-name">María Fernanda López</span></div></div>
+      <div class="testi-card"><p>"¡El Mapa de la Biblia transformó mi estudio bíblico! Ahora puedo entender los contextos, las conexiones y el mensaje de cada libro."</p><div class="testi-who"><div class="testi-avatar">AR</div><span class="testi-name">Alejandro Ramírez</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">🎁 Recibe estos regalos hoy</span><h2>Bonos para potenciar tu estudio</h2></div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-indice-rapido.png" alt="Vista previa del Índice Rápido por Necesidad"></div>
+      <div class="module-text">
+        <h3>Panorama e Índice Rápido</h3>
+        <p>Entiende cómo está organizada la Biblia y a qué libro acudir según lo que estés viviendo, para que sea también una herramienta práctica en tu día a día.</p>
+        <ul><li>Antiguo y Nuevo Testamento</li><li>Secciones y categorías</li><li>Índice por necesidad</li></ul>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-plan-lectura.png" alt="Vista previa del Plan de Lectura de 66 Días"></div>
+      <div class="module-text">
+        <h3>Plan de Lectura</h3>
+        <p>Plan de lectura con metas día a día, pensado para incentivarte a profundizar tu estudio bíblico incluso si tienes poco tiempo.</p>
+        <ul><li>Biblia en 66 días</li><li>Checklist de progreso</li></ul>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-diario-aplicacion.png" alt="Vista previa del Diario de Aplicación Personal"></div>
+      <div class="module-text">
+        <h3>Diario de Aplicación Personal</h3>
+        <p>Un espacio dedicado a registrar aprendizajes, reflexiones e ideas, ayudando a aplicar las enseñanzas bíblicas en tu día a día.</p>
+        <ul><li>Espacio para anotaciones</li><li>Preguntas guiadas</li><li>Aplicación práctica</li></ul>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-tarjetas-oracion.png" alt="Vista previa de las Tarjetas de Oración (30)"></div>
+      <div class="module-text"><h3>Tarjetas de Oración Imprimibles</h3><p>30 tarjetas con oraciones cortas para cada momento del día, listas para imprimir.</p></div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-audio-devocional.png" alt="Vista previa del Audio-Devocional 7 Salmos"></div>
+      <div class="module-text"><h3>Audio-Devocional "7 Salmos para el Alma"</h3><p>Guion narrado para acompañar 7 salmos de consuelo en momentos difíciles.</p></div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-versiculos-memorizar.png" alt="Vista previa de los 50 Versículos para Memorizar"></div>
+      <div class="module-text"><h3>50 Versículos para Memorizar</h3><p>Una selección de versículos clave, lista para guardar en tu corazón y consultar cuando la necesites.</p></div>
+    </div>
+    <div class="module">
+      <div class="module-visual"><img src="bono-fondos-pantalla.png" alt="Vista previa de los Fondos de Pantalla (15)"></div>
+      <div class="module-text"><h3>Fondos de Pantalla (15)</h3><p>15 fondos de pantalla con versículos, listos para tu celular.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="marquee-outer" style="background:var(--cream);">
+  <div class="marquee-track" id="marqueeTrack2">
+    <div class="testi-card-v2" style="flex:0 0 300px;">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-v2-name">Javier Morales</p>
+      <p class="testi-v2-quote">Siempre quise estudiar la Biblia con más profundidad, pero no sabía por dónde empezar. Con estos mapas, <strong>todo quedó mucho más claro y organizado</strong>.</p>
+    </div>
+    <div class="testi-card-v2" style="flex:0 0 300px;">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-v2-name">Diego Fernández</p>
+      <p class="testi-v2-quote">Me sorprendió lo fácil que es <strong>identificar los personajes, los acontecimientos y el propósito de cada libro</strong>. Es un material muy práctico para estudiar.</p>
+    </div>
+    <div class="testi-card-v2" style="flex:0 0 300px;">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-v2-name">Sofía Martínez</p>
+      <p class="testi-v2-quote">Ahora puedo <strong>comprender mejor cómo se relacionan los libros de la Biblia</strong>. El contenido es visual, sencillo y realmente fácil de consultar.</p>
+    </div>
+    <div class="testi-card-v2" style="flex:0 0 300px;">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-v2-name">Ricardo Salazar</p>
+      <p class="testi-v2-quote">Antes leía algunos pasajes sin entender completamente el contexto. Este material me ayudó a <strong>conectar las historias y comprender mejor el mensaje bíblico</strong>.</p>
+    </div>
+    <div class="testi-card-v2" style="flex:0 0 300px;">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-v2-name">Valentina Herrera</p>
+      <p class="testi-v2-quote">Los mapas hicieron que <strong>mi tiempo de estudio fuera más organizado y agradable</strong>. Los utilizo para aprender, tomar notas y recordar los puntos más importantes.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="precio">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Consigue hoy tu Mapa Visual de la Biblia</h2>
+      <p>Más de 10 recursos exclusivos, de Génesis a Apocalipsis.</p>
+    </div>
+    <div class="discount-banner" style="max-width:400px; margin:0 auto;">
+      <small>Descuento especial</small>
+      <span id="offer-date"></span>
+    </div>
+
+    <div class="pricing-cards">
+      <div class="price-card">
+        <h3>Básico</h3>
+        <span class="price-strike">US$ 37</span>
+        <span class="price-big">US$ 9</span>
+        <p class="price-caption">pago único</p>
+        <ul class="plan-list">
+          <li>Mapa Visual de los 66 Libros</li>
+          <li>Acceso inmediato y de por vida</li>
+          <li>Garantía de 7 días</li>
+          <li class="no">Plan de Lectura de 66 Días</li>
+          <li class="no">Diario de Aplicación Personal</li>
+          <li class="no">6 Bonos Exclusivos</li>
+        </ul>
+        <a href="#" class="btn btn-ghost" id="btnBasico" data-checkout-basico="#">ELEGIR BÁSICO</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="ribbon">Más Popular</span>
+        <h3>Completo</h3>
+        <span class="price-strike">US$ 147</span>
+        <span class="price-big">US$ 19</span>
+        <p class="price-caption">pago único</p>
+        <ul class="plan-list">
+          <li>Mapa Visual de los 66 Libros</li>
+          <li>Acceso inmediato y de por vida</li>
+          <li>Garantía de 7 días</li>
+          <li>Plan de Lectura de 66 Días</li>
+          <li>Diario de Aplicación Personal</li>
+          <li>Índice Rápido por Necesidad</li>
+          <li>Tarjetas de Oración (30)</li>
+          <li>Audio-Devocional "7 Salmos"</li>
+          <li>Línea de Tiempo Bíblica</li>
+          <li>50 Versículos para Memorizar</li>
+          <li>Fondos de Pantalla (15)</li>
+          <li>Guía de Estudio en Familia</li>
+        </ul>
+        <a href="#" class="btn">¡QUIERO EL MÍO! 📖</a>
+        <p class="trust-line">Compra 100% segura · Garantía de 7 días</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="wrap">
+    <div class="guarantee-box">
+      <div class="icon"><img src="garantia-7-dias.png" alt="Sello de Garantía de 7 Días"></div>
+      <h3 style="font-size:22px; margin-bottom:10px;">7 Días de Garantía</h3>
+      <p style="color:var(--ink-soft); font-size:14.5px;">Confiamos tanto en la calidad de nuestro material que ofrecemos garantía incondicional. Si no quedas satisfecha, devolvemos el 100% de tu dinero dentro de este plazo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="author-card">
+      <div class="author-photo">[Foto del autor/a]</div>
+      <div class="author-text">
+        <span class="eyebrow">Sobre el autor/a</span>
+        <p>[Nombre] es [credencial/trasfondo real, pendiente de confirmar].</p>
+        <p>[Historia o motivación real detrás del Mapa Visual de la Biblia, pendiente de confirmar].</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:700px; margin:0 auto;">
+    <div class="section-head"><h2>Dudas Frecuentes</h2></div>
+
+    <details>
+      <summary>¿El Mapa Visual cubre todos los libros de la Biblia?</summary>
+      <p>Sí, es una guía completa que abarca los 66 libros, tanto del Antiguo como del Nuevo Testamento.</p>
+    </details>
+    <details>
+      <summary>¿Es digital o físico?</summary>
+      <p>Por ahora ofrecemos únicamente la versión digital, con acceso inmediato desde tu celular, tablet o computadora.</p>
+    </details>
+    <details>
+      <summary>¿Cómo voy a recibir el material?</summary>
+      <p>El acceso llega a tu correo electrónico inmediatamente después de la confirmación del pago.</p>
+    </details>
+    <details>
+      <summary>¿Sustituye la necesidad de usar la Biblia durante el estudio?</summary>
+      <p>El Mapa Visual está diseñado para ofrecerte una perspectiva única y visual, pero no sustituye la riqueza y autenticidad de las Escrituras. Es una guía que te acompaña, pensada para que quieras profundizar aún más en la fuente original.</p>
+    </details>
+    <details>
+      <summary>¿Es para católicos o evangélicos?</summary>
+      <p>Es para ambos. El contenido se enfoca en el contexto histórico y el mensaje central de cada libro, sin depender de una tradición doctrinal específica.</p>
+    </details>
+
+    <div class="center" style="margin-top:30px;">
+      <a href="#precio" class="btn">¡QUIERO EL MÍO! 📖</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px;">
+        <svg class="brand-mark" viewBox="0 0 30 30"><rect width="30" height="30" rx="7" fill="#D9A441"/><circle cx="15" cy="15" r="3" fill="#22303F"/></svg>
+        <span style="color:#fff; font-family:var(--serif); font-weight:700; font-size:16px;">Mapa Visual de la Biblia</span>
+      </div>
+      <p class="mission" style="text-align:center; margin:0 auto;">Nuestra misión es ayudarte a profundizar tu fe de forma simple y clara, estudiando la Biblia y viviendo tu vida espiritual con más dirección y propósito.</p>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <ul><li><a href="#">Términos de Uso</a></li><li><a href="#">Privacidad</a></li><li><a href="#">Política de Reembolso</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © <span id="year"></span> Mapa Visual de la Biblia. Todos los derechos reservados.
+  </div>
+</footer>
+
+<div class="ds-overlay" id="dsOverlay" role="dialog" aria-modal="true" aria-labelledby="dsTitle">
+  <div class="ds-modal">
+    <button class="ds-close" id="dsClose" aria-label="Cerrar">✕</button>
+    <span class="ds-tag">Espera — oferta única</span>
+    <img src="mockup-completo-transparente.png" alt="Pack Completo — 66 Mapas Mentales de la Biblia">
+    <h2 id="dsTitle">Antes de llevarte solo el Básico...</h2>
+    <p class="ds-sub">Por un poco más, puedes llevarte <strong>todo el Pack Completo</strong>: el Mapa Visual de los 66 Libros + 9 recursos que te acompañarán en cada paso de tu estudio bíblico.</p>
+    <ul class="ds-list">
+      <li>Plan de Lectura de 66 Días</li>
+      <li>Diario de Aplicación Personal</li>
+      <li>Tarjetas de Oración (30)</li>
+      <li>Audio-Devocional "7 Salmos"</li>
+      <li>Línea de Tiempo Bíblica</li>
+      <li>+ 4 recursos más incluidos</li>
+    </ul>
+    <div class="ds-price-row">
+      <span class="price-strike">US$ 19</span>
+      <span class="price-big">US$ 14</span>
+      <p class="price-caption">pago único</p>
+      <span class="ds-save">Ahorras US$ 5 más, solo en este momento</span>
+    </div>
+    <a href="#" class="btn" id="dsAccept">SÍ, QUIERO EL PACK COMPLETO POR $14</a>
+    <button class="ds-decline" id="dsDecline">No, gracias. Prefiero continuar solo con el Mapa Básico</button>
+    <p class="ds-trust">Garantía de 7 días · Esta oferta no se repetirá después de cerrar esta ventana</p>
+  </div>
+</div>
+
+<script>
+  ['marqueeTrack','marqueeTrack2'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.innerHTML += el.innerHTML;
+  });
+
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const d = new Date();
+  document.getElementById('offer-date').textContent = `Válida hoy, ${d.getDate()} de ${meses[d.getMonth()]}`;
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Downsell popup — se dispara al hacer clic en la oferta más barata (Card A · Básico)
+  (function(){
+    const btnBasico = document.getElementById('btnBasico');
+    const overlay = document.getElementById('dsOverlay');
+    const closeBtn = document.getElementById('dsClose');
+    const declineBtn = document.getElementById('dsDecline');
+    const acceptLink = document.getElementById('dsAccept'); // TODO: apuntar al checkout del downsell ($14) cuando esté listo
+    if(!btnBasico || !overlay) return;
+
+    function openModal(){
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    btnBasico.addEventListener('click', function(e){
+      e.preventDefault();
+      openModal();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e){
+      if(e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+    });
+
+    declineBtn.addEventListener('click', function(){
+      closeModal();
+      const dest = btnBasico.getAttribute('data-checkout-basico');
+      if(dest && dest !== '#') window.location.href = dest;
+    });
+  })();
+</script>
+
+</body>
+</html>
